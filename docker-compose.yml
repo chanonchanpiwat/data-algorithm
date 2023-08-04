@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    ports:
+      - '80:80'
+    env_file:
+      - .env
+    volumes:
+      - pg-admin:/var/lib/postgresql/data
+  postgresql:
+    image: 'postgres:12.4'
+    ports:
+      - '25432:5432'
+    env_file:
+      - .env
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+  jupyter:
+    build: .
+    ports:
+      - '888:8888'
+    volumes:
+      - .:/app
+    entrypoint: 
+      jupyter notebook --ip 0.0.0.0 --port 8888 --no-browser --allow-root --NotebookApp.token=''
+
+volumes:
+  pg-admin:
+  postgres-volume:
